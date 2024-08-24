@@ -8,18 +8,13 @@ class CrossZeroGame:
         self.current_player_symbol = GameSymbols.CROSS
 
     def get_player_move(self):
-        while True:
-            try:
-                move = input(f"Player {self.current_player_symbol.value}, enter your move in next format 'row column',"
-                             f" where row and column must be from 1 to {self.game_board.size}: ")
-                row, col = map(int, move.split())
-                if row in range(1, self.game_board.size + 1) and col in range(1, self.game_board.size + 1):
-                    return row - 1, col - 1
-                else:
-                    print(f"Please enter a valid row and column (1-{self.game_board.size}).")
-            except ValueError:
-                print(
-                    "Invalid input. Please enter row and column as two numbers separated by space, like 'row column'.")
+        move = input(f"Player {self.current_player_symbol.value}, enter your move in next format 'row column',"
+                     f" where row and column must be from 1 to {self.game_board.size}: ")
+        row, col = map(int, move.split())
+        if row in range(1, self.game_board.size + 1) and col in range(1, self.game_board.size + 1):
+            return row - 1, col - 1
+        else:
+            raise ValueError(f"Please enter a valid row and column (1-{self.game_board.size}).")
 
     def check_winner(self):
         for row in self.game_board.board:
@@ -44,7 +39,12 @@ class CrossZeroGame:
     def play(self):
         while True:
             self.game_board.print_board()
-            row, col = self.get_player_move()
+
+            try:
+                row, col = self.get_player_move()
+            except ValueError:
+                print(f"Please enter a valid row and column (1-{self.game_board.size}).")
+                continue
 
             try:
                 self.game_board.set_symbol(self.current_player_symbol, row, col)

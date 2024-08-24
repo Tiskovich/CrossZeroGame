@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import patch, call
 
 import pytest
 
@@ -22,11 +22,8 @@ def test_player_move_valid(game):
 
 def test_player_move_invalid(game):
     with patch('builtins.input', return_value='4 4'):
-        with patch('builtins.print') as mocked_print:
-            row, col = game.get_player_move()
-            assert row == 0
-            assert col == 0
-            mocked_print.assert_called_with("Please enter a valid row and column (1-3).")
+        with pytest.raises(ValueError):
+            game.get_player_move()
 
 def test_check_winner_horizontal(game):
     game.game_board.set_symbol(GameSymbols.CROSS, 0, 0)
@@ -52,12 +49,12 @@ def test_check_draw(game):
     game.game_board.set_symbol(GameSymbols.CROSS, 0, 0)
     game.game_board.set_symbol(GameSymbols.ZERO, 0, 1)
     game.game_board.set_symbol(GameSymbols.CROSS, 0, 2)
-    game.game_board.set_symbol(GameSymbols.ZERO, 1, 0)
-    game.game_board.set_symbol(GameSymbols.CROSS, 1, 1)
-    game.game_board.set_symbol(GameSymbols.ZERO, 1, 2)
-    game.game_board.set_symbol(GameSymbols.CROSS, 2, 0)
-    game.game_board.set_symbol(GameSymbols.ZERO, 2, 1)
-    game.game_board.set_symbol(GameSymbols.CROSS, 2, 2)
+    game.game_board.set_symbol(GameSymbols.CROSS, 1, 0)
+    game.game_board.set_symbol(GameSymbols.ZERO, 1, 1)
+    game.game_board.set_symbol(GameSymbols.CROSS, 1, 2)
+    game.game_board.set_symbol(GameSymbols.ZERO, 2, 0)
+    game.game_board.set_symbol(GameSymbols.CROSS, 2, 1)
+    game.game_board.set_symbol(GameSymbols.ZERO, 2, 2)
     assert game.is_game_board_full()
     assert not game.check_winner()
 
@@ -67,11 +64,11 @@ def test_game_play_win_horizontal(monkeypatch):
         with patch('builtins.print') as mocked_print:
             game = CrossZeroGame()
             game.play()
-            calls = [pytest.call(f"Player {symbol.value} wins!") for symbol in [GameSymbols.CROSS]]
+            calls = [call(f"Player {symbol.value} wins!") for symbol in [GameSymbols.CROSS]]
             mocked_print.assert_has_calls(calls)
 
 def test_game_play_draw(monkeypatch):
-    moves = ['1 1', '1 2', '1 3', '2 1', '2 2', '2 3', '3 1', '3 2', '3 3']
+    moves = ['1 1', '1 2', '1 3', '2 1', '2 3', '2 2', '3 1', '3 3', '3 2']
     with patch('builtins.input', side_effect=moves):
         with patch('builtins.print') as mocked_print:
             game = CrossZeroGame()

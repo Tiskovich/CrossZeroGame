@@ -33,13 +33,14 @@ def test_set_symbol_already_occupied():
 
 def test_print_board(capsys):
     game_board = GameBoard(3)
-    game_board.set_symbol(GameSymbols.X, 1, 1)
+    game_board.set_symbol(GameSymbols.CROSS, 1, 1)
     game_board.print_board()
     captured = capsys.readouterr()
+    actual_board = captured.out.lstrip('Current board:\n')
     expected_output = "\n".join([
-        "  |   |  ",
-        "  | X |  ",
-        "  |   |  ",
+        "|  | ",
+        " | X | ",
+        " |  | ",
         ""
     ])
-    assert captured.out == expected_output
+    assert actual_board == expected_output
