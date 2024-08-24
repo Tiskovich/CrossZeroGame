@@ -1,6 +1,6 @@
 from typing import List
 
-from constants import GameSymbols
+from game_app.constants import GameSymbols
 
 
 class GameBoard:

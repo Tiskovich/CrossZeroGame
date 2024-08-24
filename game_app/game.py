@@ -1,5 +1,5 @@
-from board import GameBoard
-from constants import GameSymbols
+from game_app.board import GameBoard
+from game_app.constants import GameSymbols
 
 
 class CrossZeroGame:

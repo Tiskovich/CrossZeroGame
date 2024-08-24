@@ -3,7 +3,7 @@ import pytest
 from game_app.board import GameBoard
 from game_app.constants import GameSymbols
 
-pytest.mark.parametrize('board_size', [
+@pytest.mark.parametrize('board_size', [
     pytest.param(3),
     pytest.param(4),
     pytest.param(5),
@@ -14,7 +14,7 @@ def test_create_board(board_size):
     assert all(len(row) == board_size for row in game_board.board)
     assert all(cell == GameSymbols.EMPTY for row in game_board.board for cell in row)
 
-pytest.mark.parametrize('symbol', [
+@pytest.mark.parametrize('symbol', [
     pytest.param(GameSymbols.ZERO, id='zero'),
     pytest.param(GameSymbols.CROSS, id='cross'),
 ])
